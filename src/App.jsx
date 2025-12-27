@@ -32,7 +32,6 @@ export default function Store() {
   const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
-    // Get user location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -66,7 +65,6 @@ export default function Store() {
       recs.push(...journals.filter(j => j.category === 'Men'));
     }
 
-    // Price recommendations based on income
     if (demographics.income === 'Low') {
       recs.sort((a, b) => a.price - b.price);
     } else if (demographics.income === 'High') {
@@ -111,14 +109,11 @@ export default function Store() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Header */}
       <header className="bg-black bg-opacity-40 backdrop-blur-sm border-b border-purple-500 border-opacity-20 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-              👑 The Goddess Empowerment
-            </h1>
-          </div>
+          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+            👑 The Goddess Empowerment
+          </h1>
           <div className="flex items-center gap-4">
             {user && (
               <div className="flex items-center gap-2 text-purple-300">
@@ -156,7 +151,6 @@ export default function Store() {
         </div>
       </header>
 
-      {/* User Modal */}
       {showUserModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full border border-purple-500 border-opacity-30">
@@ -219,7 +213,6 @@ export default function Store() {
         </div>
       )}
 
-      {/* Cart Sidebar */}
       {showCart && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end z-50">
           <div className="bg-slate-800 w-full max-w-md flex flex-col border-l border-purple-500 border-opacity-30">
@@ -281,9 +274,7 @@ export default function Store() {
         </div>
       )}
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-12">
-        {/* Recommendations Section */}
         {recommendations.length > 0 && (
           <div className="mb-12 bg-gradient-to-r from-purple-600 to-pink-600 bg-opacity-20 border border-purple-500 border-opacity-30 rounded-lg p-8">
             <h2 className="text-2xl font-bold text-white mb-6">✨ Personalized for You</h2>
@@ -293,4 +284,59 @@ export default function Store() {
                   <div className="text-5xl mb-3 group-hover:scale-110 transition">{journal.image}</div>
                   <h3 className="font-semibold text-white mb-2 text-sm line-clamp-2">{journal.name}</h3>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-transparent bg-clip-text
+                    <span className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                      ${journal.price.toFixed(2)}
+                    </span>
+                    <button
+                      onClick={() => addToCart(journal)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm transition"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div>
+          <h2 className="text-3xl font-bold text-white mb-8">All Products</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {journals.map(journal => (
+              <div
+                key={journal.id}
+                className="bg-slate-800 bg-opacity-50 rounded-lg p-4 border border-purple-500 border-opacity-20 hover:border-purple-500 transition group cursor-pointer"
+              >
+                <div className="text-5xl mb-3 group-hover:scale-110 transition">{journal.image}</div>
+                <h3 className="font-semibold text-white mb-2 text-sm line-clamp-3 h-12">{journal.name}</h3>
+                <p className="text-xs text-purple-300 mb-3">{journal.category}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                    ${journal.price.toFixed(2)}
+                  </span>
+                  <button
+                    onClick={() => addToCart(journal)}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm transition"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      <footer className="bg-black bg-opacity-40 border-t border-purple-500 border-opacity-20 mt-20">
+        <div className="max-w-7xl mx-auto px-4 py-8 text-center text-gray-400 text-sm">
+          <p>© 2025 The Goddess Empowerment. All rights reserved.</p>
+          <div className="flex justify-center gap-4 mt-4 text-purple-400">
+            <a href="#" className="hover:text-purple-300">Privacy Policy</a>
+            <a href="#" className="hover:text-purple-300">Terms & Conditions</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
